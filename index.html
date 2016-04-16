@@ -16,21 +16,22 @@
     <table>
       <tr>
         <th>Expecting:</th>
-        <td><em>{{gc.problem.name}}: {{ gc.problem.message }}</em></td>
+        <td><em class="highlight">{{gc.problem.name}}: {{ gc.problem.message }}</em></td>
       </tr>
-      <tr ng-show="gc.error_raised && !gc.answered_correctly">
+      <tr >
         <th>Got:</th>
-        <td><em>{{ gc.error_raised }}</em></td>
+        <td><em ng-class="{highlight: gc.error_raised}">{{ gc.error_raised }}</em></td>
       </tr>
     </table>
 
-    <hr>
+    <div class="console">
+      <div class="history" overflow-upward>
 
-    <form ng-submit="gc.evaluateGuess(gc.guess)">
-      &gt; <input class="guess" ng-model="gc.guess" autofocus>
-    </form>
-
-    <hr>
+      </div>
+      <form ng-submit="gc.evaluateGuess(gc.guess); ">
+        &gt; <input class="guess" ng-model="gc.guess" autofocus>
+      </form>
+    </div>
 
     <div>
       Answer:

@@ -53,5 +53,22 @@ th {
 }
 
 em {
+  transition: background-color 2s ease;
+}
+.highlight {
   background-color: yellow;
+}
+
+.console {
+  width: 100%;
+  padding: 20px 0;
+  margin: 20px 0;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.history {
+  height: 80px;
+  font-size: 20px;
+  overflow-y: scroll;
+  margin-bottom: 10px;
 }

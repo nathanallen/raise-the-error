@@ -1,7 +1,8 @@
 angular
   .module("errorGameApp", [])
   .service("ProblemService", ProblemService)
-  .controller("GameController", GameController);
+  .controller("GameController", GameController)
+  .directive("overflowUpward", overflowUpwardDirective)
 
 
 GameController.$inject = [ '$interpolate', 'ProblemService' ];
@@ -10,7 +11,7 @@ function GameController(    $inteporlate,   ProblemService   ){
   vm.evaluateGuess = evaluateGuess;
   vm.nextProblem = nextProblem;
   vm.playAgain = playAgain;
-
+  vm.guess_history = [];
   nextProblem();
 
   ////
@@ -23,6 +24,7 @@ function GameController(    $inteporlate,   ProblemService   ){
   }
 
   function evaluateGuess(guess){
+    vm.guess_history.push(guess);
     var confirmation = vm.problem.checkGuess(guess);
     vm.answered_correctly = confirmation.status;
     vm.error_raised = confirmation.error;
@@ -131,6 +133,18 @@ Problem.prototype.checkGuess = function(guess){
     return self.message.endsWith(error.message);
   }
 }
+
+function overflowUpwardDirective(){
+    return {
+      template: '<div ng-repeat="g in gc.guess_history"> &gt;{{g}} </div>',
+      link: function link(scope, element, attrs, controller, transcludeFn){
+        scope.$watchCollection('gc.guess_history', function(){
+          var el = element[0];
+          el.scrollTop = el.scrollHeight;
+        })
+      }
+    }
+  }
 
 
 // CHROME ONLY
