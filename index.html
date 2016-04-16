@@ -15,6 +15,7 @@
       color: white;
       margin: 2px;
       padding: 2px;
+      cursor: pointer;
     }
   </style>
 
@@ -46,7 +47,8 @@
     <p>
       Answer:
       <code ng-repeat="answer in gc.problem.acceptable_answers"
-            ng-class="{green: answer.guessed, box: !answer.guessed}">{{ answer.key }}</code>
+            ng-class="{green: answer.guessed, box: !answer.guessed}"
+            ng-click="answer.guessed=true;gc.answered_correctly=true;">{{ answer.key }}</code>
     </p>
     <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem()">Next</button>
   </div>
