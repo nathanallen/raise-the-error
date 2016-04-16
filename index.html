@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="errorGameApp">
+<head>
+  <title>Raise The Error - Javascript</title>
+  <script type="text/javascript" src="https://opensource.keycdn.com/angularjs/1.5.3/angular.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script type="text/javascript" src='app.js'></script>
+</head>
+<body>
+
+  <div ng-controller="GameController as gc">
+
+    <p>{{ gc.error_message }}</p>
+    <form ng-submit="gc.evaluateGuess(guess)">
+      &gt; <input ng-model="guess" autofocus>
+      <input type="checkbox" checked ng-show="gc.answered_correctly">
+    </form>
+
+    <hr>
+
+    <p>Type: {{ gc.error.type }}</p>
+    <p>Answer: {{ gc.answer }}</p>
+    <button ng-show="gc.answered_correctly">Next</button>
+
+  </div>
+
+</body>
+</html>
