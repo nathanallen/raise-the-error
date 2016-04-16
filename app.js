@@ -154,7 +154,7 @@ var POSSIBLE_ERRORS = [
   {
     name: "SyntaxError",
     message_template: "Unexpected token }",
-    keys: ['}', '[', '(', '~', '-', 'function'], // buggy: ['!']
+    keys: ['}'], // evaling as "end of input": ['[', '(', '~', '-', '!', 'function']
     multiple_answers: true
   },
   {
