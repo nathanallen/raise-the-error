@@ -10,16 +10,26 @@
 
   <div ng-controller="GameController as gc">
 
-    <p>{{ gc.error.message }}</p>
-    <form ng-submit="gc.evaluateGuess(guess)">
-      &gt; <input ng-model="guess" autofocus>
+    <p>
+      <strong>Expecting:</strong>
+      {{gc.problem.name}}: {{ gc.problem.message }}
+    </p>
+    <p>
+      <span ng-show="gc.error_raised && !gc.answered_correctly">
+        <strong>Got:</strong>
+        {{ gc.error_raised }}
+      </span>
+      &nbsp;
+    </p>
+
+    <form ng-submit="gc.evaluateGuess(gc.guess)">
+      &gt; <input ng-model="gc.guess" autofocus>
       <input type="checkbox" checked ng-show="gc.answered_correctly">
     </form>
 
     <hr>
 
-    <p>Name: {{ gc.error.name }}</p>
-    <p>Answer: {{ gc.error.answer }}</p>
+    <p>Answer: {{ gc.problem.key }}</p>
     <button ng-show="gc.answered_correctly" ng-click="gc.nextProblem()">Next</button>
 
   </div>

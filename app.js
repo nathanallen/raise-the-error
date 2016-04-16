@@ -15,12 +15,20 @@ function GameController(    $inteporlate, ProblemService    ){
   ////
 
   function nextProblem(){
-    vm.error = ProblemService.next();
-    vm.answered_correctly = false;
+    vm.problem = ProblemService.next();
+    reset();
   }
 
   function evaluateGuess(guess){
-    vm.answered_correctly = vm.error.isCorrect(guess)
+    var confirmation = vm.problem.checkGuess(guess);
+    vm.answered_correctly = confirmation.status;
+    vm.error_raised = confirmation.error;
+  }
+
+  function reset(){
+    vm.answered_correctly = false;
+    vm.error_raised = "";
+    vm.guess = "";
   }
 }
 
@@ -50,17 +58,29 @@ _.templateSettings = {
 function Problem(opts){
   var self = this;
   self.name = opts.name; // name of error
-  self.answer = _.sample(opts.variables);
-  self.message = _.template("Uncaught {{name}}: " + opts.message_template)(self)
+  self.key = _.sample(opts.keys);
+  self.full_error_message = _.template("Uncaught {{name}}: " + opts.message_template)(self);
+  self.message = _.template(opts.message_template)(self);
 }
-Problem.prototype.isCorrect = function(guess){
+Problem.prototype.checkGuess = function(guess){
   var self = this;
+
   try {
     eval(guess);
   } catch (error) {
-    if ( nameMatches(error) && messageMatches(error) ) {
-      return true;
+
+    var result = {
+      error: error.toString()
     }
+
+    if ( nameMatches(error) && messageMatches(error) ) {
+      result.status = true;
+      return result;
+    }
+
+    result.status = false;
+    return result;
+
   }
 
   return false;
@@ -72,7 +92,7 @@ Problem.prototype.isCorrect = function(guess){
   }
 
   function messageMatches(error){
-    return self.message.match(error.message).length;
+    return ( self.message.match(error.message) || [] ).length;
   }
 }
 
@@ -81,13 +101,13 @@ Problem.prototype.isCorrect = function(guess){
 var POSSIBLE_ERRORS = [
   {
     name: "ReferenceError",
-    message_template: "{{answer}} is not defined",
-    variables: ["foo", "bar", "baz"]
+    message_template: "{{key}} is not defined",
+    keys: ["foo", "bar", "baz"]
   },
   {
     name: "TypeError",
-    message_template: "Cannot read property '{{answer}}' of undefined",
-    variables: ["foo", "bar", "baz"]
+    message_template: "Cannot read property '{{key}}' of undefined",
+    keys: ["foo", "bar", "baz"]
   }
 ]
 
