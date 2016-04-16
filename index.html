@@ -5,53 +5,42 @@
   <script type="text/javascript" src="https://opensource.keycdn.com/angularjs/1.5.3/angular.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <script type="text/javascript" src='app.js'></script>
-
-  <style>
-    .green {
-      background-color: black;
-    }
-    code {
-      border: 1px solid black;
-      color: white;
-      margin: 2px;
-      padding: 2px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 
 </head>
-<body>
-  <h1>Raise The Error</h1>
+<body class="container">
+  <h1>Raise The Error!</h1>
 
   <div ng-controller="GameController as gc">
 
-    <p>
-      <strong>Expecting:</strong>
-      {{gc.problem.name}}: {{ gc.problem.message }}
-    </p>
-    <p>
-      <span ng-show="gc.error_raised && !gc.answered_correctly">
-        <strong>Got:</strong>
-        {{ gc.error_raised }}
-      </span>
-      &nbsp;
-    </p>
+    <table>
+      <tr>
+        <th>Expecting:</th>
+        <td><em>{{gc.problem.name}}: {{ gc.problem.message }}</em></td>
+      </tr>
+      <tr ng-show="gc.error_raised && !gc.answered_correctly">
+        <th>Got:</th>
+        <td><em>{{ gc.error_raised }}</em></td>
+      </tr>
+    </table>
+
+    <hr>
 
     <form ng-submit="gc.evaluateGuess(gc.guess)">
-      &gt; <input ng-model="gc.guess" autofocus>
-      <input type="checkbox" checked ng-show="gc.answered_correctly" tabindex="-1">
+      &gt; <input class="guess" ng-model="gc.guess" autofocus>
     </form>
 
     <hr>
 
-    <p>
+    <div>
       Answer:
       <code ng-repeat="answer in gc.problem.acceptable_answers"
             ng-class="{green: answer.guessed, box: !answer.guessed}"
             ng-click="answer.guessed=true;gc.answered_correctly=true;">{{ answer.key }}</code>
-    </p>
-    <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem()">Next</button>
-    <button ng-show="gc.is_last_problem && gc.answered_correctly" ng-click="gc.playAgain()">Play Again?</button>
+      <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem()">Next</button>
+      <input type="checkbox" checked ng-show="gc.answered_correctly" tabindex="-1" disabled>
+      <button ng-show="gc.is_last_problem && gc.answered_correctly" ng-click="gc.playAgain()">Play Again?</button>
+    </div>
   </div>
 
 </body>

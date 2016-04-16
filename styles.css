@@ -1,0 +1,57 @@
+.container {
+  width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.green {
+  background-color: black;
+}
+
+
+body {
+  /*border: 4px double black;*/
+  font-size: 1.3em;
+}
+
+h1 {
+  font-family: monospace;
+  font-size: 40px;
+
+}
+
+code {
+  border: 1px solid black;
+  color: white;
+  margin: 2px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+hr {
+  margin: 40px 0;
+}
+
+button {
+  float: right;
+  font-size: 20px;
+  background: white;
+}
+
+input.guess {
+  width: 90%;
+  height: 40px;
+  font-size: 20px;
+  font-family: monospace;
+}
+
+th {
+  text-align: right;
+  font-family: arial, sans-serif;
+  font-weight: normal;
+  padding-right: 40px;
+}
+
+em {
+  background-color: yellow;
+}
