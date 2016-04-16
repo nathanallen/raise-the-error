@@ -99,7 +99,7 @@ Problem.prototype.checkGuess = function(guess){
   }
 
   function messageMatches(error){
-    return ( self.message.match(error.message) || [] ).length;
+    return self.message.endsWith(error.message);
   }
 }
 
