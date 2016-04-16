@@ -9,6 +9,7 @@ function GameController(    $inteporlate,   ProblemService   ){
   var vm = this;
   vm.evaluateGuess = evaluateGuess;
   vm.nextProblem = nextProblem;
+  vm.playAgain = playAgain;
 
   nextProblem();
 
@@ -32,26 +33,37 @@ function GameController(    $inteporlate,   ProblemService   ){
     vm.error_raised = "";
     vm.guess = "";
   }
+
+  function playAgain(){
+    ProblemService.reset();
+    vm.is_last_problem = false;
+    nextProblem();
+  }
 }
 
 // ProblemService.$inject = [];
 function ProblemService(){
   var self = this;
-  var current_index = -1;
-
-  self.possible_errors = _.shuffle(POSSIBLE_ERRORS);
   self.next = next;
+  self.reset = init;
+
+  init();
 
   ////
 
   function next(){
-    current_index++;
-    next_problem_data = self.possible_errors[current_index];
+    self.current_index++;
+    next_problem_data = self.possible_errors[self.current_index];
     if ( _.isUndefined(next_problem_data) ){ return {done: true}; }
     return {
       value: new Problem(next_problem_data),
-      done: _.isUndefined(self.possible_errors[current_index+1])
+      done: _.isUndefined(self.possible_errors[self.current_index+1])
     };
+  }
+
+  function init(){
+    self.current_index = -1;
+    self.possible_errors = _.shuffle(POSSIBLE_ERRORS);
   }
 
 }

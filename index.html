@@ -51,6 +51,7 @@
             ng-click="answer.guessed=true;gc.answered_correctly=true;">{{ answer.key }}</code>
     </p>
     <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem()">Next</button>
+    <button ng-show="gc.is_last_problem && gc.answered_correctly" ng-click="gc.playAgain()">Play Again?</button>
   </div>
 
 </body>
