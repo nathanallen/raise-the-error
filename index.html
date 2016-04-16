@@ -7,6 +7,7 @@
   <script type="text/javascript" src='app.js'></script>
 </head>
 <body>
+  <h1>Raise The Error</h1>
 
   <div ng-controller="GameController as gc">
 
@@ -24,14 +25,13 @@
 
     <form ng-submit="gc.evaluateGuess(gc.guess)">
       &gt; <input ng-model="gc.guess" autofocus>
-      <input type="checkbox" checked ng-show="gc.answered_correctly">
+      <input type="checkbox" checked ng-show="gc.answered_correctly" tabindex="-1">
     </form>
 
     <hr>
 
     <p>Answer: {{ gc.problem.key }}</p>
-    <button ng-show="gc.answered_correctly" ng-click="gc.nextProblem()">Next</button>
-
+    <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem()">Next</button>
   </div>
 
 </body>

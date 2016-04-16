@@ -15,7 +15,9 @@ function GameController(    $inteporlate, ProblemService    ){
   ////
 
   function nextProblem(){
-    vm.problem = ProblemService.next();
+    var next = ProblemService.next();
+    vm.problem = next.value;
+    vm.is_last_problem = next.done;
     reset();
   }
 
@@ -44,7 +46,12 @@ function ProblemService(){
 
   function next(){
     current_index++;
-    return new Problem(self.possible_errors[current_index]);
+    next_problem_data = self.possible_errors[current_index];
+    if ( _.isUndefined(next_problem_data) ){ return {done: true}; }
+    return {
+      value: new Problem(next_problem_data),
+      done: _.isUndefined(self.possible_errors[current_index+1])
+    };
   }
 
 }
@@ -109,5 +116,4 @@ var POSSIBLE_ERRORS = [
     message_template: "Cannot read property '{{key}}' of undefined",
     keys: ["foo", "bar", "baz"]
   }
-]
-
+];
