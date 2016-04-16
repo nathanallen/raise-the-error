@@ -5,6 +5,19 @@
   <script type="text/javascript" src="https://opensource.keycdn.com/angularjs/1.5.3/angular.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <script type="text/javascript" src='app.js'></script>
+
+  <style>
+    .green {
+      background-color: black;
+    }
+    code {
+      border: 1px solid black;
+      color: white;
+      margin: 2px;
+      padding: 2px;
+    }
+  </style>
+
 </head>
 <body>
   <h1>Raise The Error</h1>
@@ -30,7 +43,11 @@
 
     <hr>
 
-    <p>Answer: {{ gc.problem.key }}</p>
+    <p>
+      Answer:
+      <code ng-repeat="answer in gc.problem.acceptable_answers"
+            ng-class="{green: answer.guessed, box: !answer.guessed}">{{ answer.key }}</code>
+    </p>
     <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem()">Next</button>
   </div>
 

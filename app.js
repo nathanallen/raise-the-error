@@ -5,7 +5,7 @@ angular
 
 
 GameController.$inject = [ '$interpolate', 'ProblemService' ];
-function GameController(    $inteporlate, ProblemService    ){
+function GameController(    $inteporlate,   ProblemService   ){
   var vm = this;
   vm.evaluateGuess = evaluateGuess;
   vm.nextProblem = nextProblem;
@@ -39,7 +39,7 @@ function ProblemService(){
   var self = this;
   var current_index = -1;
 
-  self.possible_errors = POSSIBLE_ERRORS;
+  self.possible_errors = _.shuffle(POSSIBLE_ERRORS);
   self.next = next;
 
   ////
@@ -66,11 +66,28 @@ function Problem(opts){
   var self = this;
   self.name = opts.name; // name of error
   self.key = _.sample(opts.keys);
+  self.acceptable_answers = createAnswers();
   self.full_error_message = _.template("Uncaught {{name}}: " + opts.message_template)(self);
   self.message = _.template(opts.message_template)(self);
+
+  ////
+
+  function createAnswers(){
+    var result = {};
+    var answers = opts.multiple_answers ? opts.keys : [self.key]
+    answers.forEach(function(key){
+      result[key] = {key: key, guessed: false};
+    })
+    return result;
+  }
 }
 Problem.prototype.checkGuess = function(guess){
   var self = this;
+
+  var answer = self.acceptable_answers[guess];
+  if (answer) {
+    answer.guessed = true;
+  }
 
   try {
     eval(guess);
@@ -110,6 +127,7 @@ var POSSIBLE_ERRORS = [
     name: "ReferenceError",
     message_template: "{{key}} is not defined",
     keys: ["foo", "bar", "baz"]
+    // TODO add accepted_answer: undefined.foo
   },
   {
     name: "TypeError",
@@ -124,16 +142,19 @@ var POSSIBLE_ERRORS = [
   {
     name: "SyntaxError",
     message_template: "Unexpected token }",
-    keys: ['}', '[', '(', '~', '-', 'function', '!'] // ANY OF THESE
+    keys: ['}', '[', '(', '~', '-', 'function'], // buggy: ['!']
+    multiple_answers: true
   },
   {
     name: "SyntaxError",
     message_template: "Unexpected end of input",
-    keys: ['{', '(', '!'] // ANY OF THESE
+    keys: ['{', '(', '['],
+    multiple_answers: true
   },
   {
     name: "SyntaxError",
     message_template: "Unexpected token ILLEGAL",
-    keys: ['#', '@', '\\', ] // ANY OF THESE
+    keys: ['#', '@', '\\', ],
+    multiple_answers: true
   }
 ];
