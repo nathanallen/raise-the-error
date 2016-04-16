@@ -104,7 +104,7 @@ Problem.prototype.checkGuess = function(guess){
 }
 
 
-
+// CHROME ONLY
 var POSSIBLE_ERRORS = [
   {
     name: "ReferenceError",
@@ -115,5 +115,25 @@ var POSSIBLE_ERRORS = [
     name: "TypeError",
     message_template: "Cannot read property '{{key}}' of undefined",
     keys: ["foo", "bar", "baz"]
+  },
+  {
+    name: "SyntaxError",
+    message_template: "Unexpected token {{key}}",
+    keys: [']', ')', ':', ',', '.', '>', '<', '<=', '>=', '!=', '|', '||', '||=', '&', '&&', '^', '*']
+  },
+  {
+    name: "SyntaxError",
+    message_template: "Unexpected token }",
+    keys: ['}', '[', '(', '~', '-', 'function', '!'] // ANY OF THESE
+  },
+  {
+    name: "SyntaxError",
+    message_template: "Unexpected end of input",
+    keys: ['{', '(', '!'] // ANY OF THESE
+  },
+  {
+    name: "SyntaxError",
+    message_template: "Unexpected token ILLEGAL",
+    keys: ['#', '@', '\\', ] // ANY OF THESE
   }
 ];
