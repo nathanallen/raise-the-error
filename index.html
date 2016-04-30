@@ -26,7 +26,7 @@
           &gt; {{g.guess}}
           <span class="pull-right">
             <em ng-class="{highlight: g.error_raised}">
-              {{ g.error_raised }}
+              {{ g.error_raised || g.output }}
             </em>
             <span class="checkmark" ng-show="g.is_correct">&#x2713;</span>
           </span>

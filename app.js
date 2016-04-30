@@ -34,11 +34,12 @@ function GameController(    $inteporlate,   ProblemService   ){
 
   function evaluateGuess(guess){
     var confirmation = vm.problem.checkGuess(guess);
-    vm.answered_correctly = vm.answered_correctly || confirmation.status;
+    vm.answered_correctly = vm.answered_correctly || confirmation.status; // stay true once toggled
     vm.guess_history.push({
       guess: guess,
       error_raised: confirmation.error,
-      is_correct: confirmation.status
+      is_correct: confirmation.status,
+      output: confirmation.output || guess // display original input if eval returns falsey
     });
     vm.guess = ""; // clear input
   }
@@ -127,7 +128,7 @@ Problem.prototype.checkGuess = function(guess){
   var result = {};
 
   try {
-    eval(guess);
+    result.output = eval(guess); // BUG: eval("this")
   } catch (error) {
 
     result.error = error.toString();
