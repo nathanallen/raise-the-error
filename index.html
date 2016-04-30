@@ -18,18 +18,22 @@
         <th>Expecting:</th>
         <td><em class="highlight">{{gc.problem.name}}: {{ gc.problem.message }}</em></td>
       </tr>
-      <tr >
-        <th>Got:</th>
-        <td><em ng-class="{highlight: gc.error_raised}">{{ gc.error_raised }}</em></td>
-      </tr>
     </table>
 
     <div class="console">
-      <div class="history" overflow-upward>
-
+      <div class="history" overflow-upward="gc.guess_history">
+        <div ng-repeat="g in gc.guess_history">
+          &gt; {{g.guess}}
+          <span class="pull-right">
+            <em ng-class="{highlight: g.error_raised}">
+              {{ g.error_raised }}
+            </em>
+            <span class="checkmark" ng-show="g.is_correct">&#x2713;</span>
+          </span>
+        </div>
       </div>
-      <form ng-submit="gc.evaluateGuess(gc.guess); ">
-        &gt; <input class="guess" ng-model="gc.guess" autofocus>
+      <form ng-submit="gc.evaluateGuess(gc.guess)">
+        &gt; <input class="guess" ng-model="gc.guess" autofocus set-focus="toggleMe">
       </form>
     </div>
 
@@ -38,7 +42,7 @@
       <code ng-repeat="answer in gc.problem.acceptable_answers"
             ng-class="{green: answer.guessed, box: !answer.guessed}"
             ng-click="answer.guessed=true;gc.answered_correctly=true;">{{ answer.key }}</code>
-      <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem()">Next</button>
+      <button ng-show="gc.answered_correctly && !gc.is_last_problem" ng-click="gc.nextProblem();toggleMe=!toggleMe;">Next</button>
       <input type="checkbox" checked ng-show="gc.answered_correctly" tabindex="-1" disabled>
       <button ng-show="gc.is_last_problem && gc.answered_correctly" ng-click="gc.playAgain()">Play Again?</button>
     </div>

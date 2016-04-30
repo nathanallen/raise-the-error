@@ -1,9 +1,18 @@
+/**********
+ * Config *
+ **********/
+
 angular
   .module("errorGameApp", [])
   .service("ProblemService", ProblemService)
   .controller("GameController", GameController)
   .directive("overflowUpward", overflowUpwardDirective)
+  .directive("setFocus", setFocus)
 
+
+/***************
+ * Controllers *
+ ***************/
 
 GameController.$inject = [ '$interpolate', 'ProblemService' ];
 function GameController(    $inteporlate,   ProblemService   ){
@@ -24,10 +33,14 @@ function GameController(    $inteporlate,   ProblemService   ){
   }
 
   function evaluateGuess(guess){
-    vm.guess_history.push(guess);
     var confirmation = vm.problem.checkGuess(guess);
-    vm.answered_correctly = confirmation.status;
-    vm.error_raised = confirmation.error;
+    vm.answered_correctly = vm.answered_correctly || confirmation.status;
+    vm.guess_history.push({
+      guess: guess,
+      error_raised: confirmation.error,
+      is_correct: confirmation.status
+    });
+    vm.guess = ""; // clear input
   }
 
   function reset(){
@@ -42,6 +55,10 @@ function GameController(    $inteporlate,   ProblemService   ){
     nextProblem();
   }
 }
+
+/************
+ * Services *
+ ************/
 
 // ProblemService.$inject = [];
 function ProblemService(){
@@ -76,6 +93,10 @@ _.templateSettings = {
 };
 
 
+/**********
+ * Models *
+ **********/
+
 function Problem(opts){
   var self = this;
   self.name = opts.name; // name of error
@@ -103,25 +124,23 @@ Problem.prototype.checkGuess = function(guess){
     answer.guessed = true;
   }
 
+  var result = {};
+
   try {
     eval(guess);
   } catch (error) {
 
-    var result = {
-      error: error.toString()
-    }
+    result.error = error.toString();
 
     if ( nameMatches(error) && messageMatches(error) ) {
       result.status = true;
       return result;
     }
 
-    result.status = false;
-    return result;
-
   }
 
-  return false;
+  result.status = false;
+  return result;
 
   ////
 
@@ -134,18 +153,40 @@ Problem.prototype.checkGuess = function(guess){
   }
 }
 
+/**************
+ * Directives *
+ **************/
+
 function overflowUpwardDirective(){
-    return {
-      template: '<div ng-repeat="g in gc.guess_history"> &gt;{{g}} </div>',
-      link: function link(scope, element, attrs, controller, transcludeFn){
-        scope.$watchCollection('gc.guess_history', function(){
-          var el = element[0];
-          el.scrollTop = el.scrollHeight;
-        })
-      }
+  return {
+    link: function link(scope, element, attrs, controller, transcludeFn){
+      var collection = attrs['overflowUpward'];
+      scope.$watchCollection(collection, function(){
+        var el = element[0];
+        el.scrollTop = el.scrollHeight;
+      })
     }
   }
+}
 
+function setFocus($timeout){
+  return {
+    link:function(scope, elem, attr){
+      var focusTarget = attr['setFocus'];
+      // reset focus on elem every time focusTarget's value changes
+      scope.$watch(focusTarget, function(){
+        $timeout(function(){
+          elem[0].focus();
+        });
+      });
+    }
+  }
+}
+
+
+/****************
+ * Stubbed Data *
+ ****************/
 
 // CHROME ONLY
 var POSSIBLE_ERRORS = [

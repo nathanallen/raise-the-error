@@ -40,9 +40,11 @@ button {
 
 input.guess {
   width: 90%;
-  height: 40px;
+  height: 60px;
   font-size: 20px;
   font-family: monospace;
+  outline: none;
+  border: none;
 }
 
 th {
@@ -53,9 +55,9 @@ th {
 }
 
 em {
-  transition: background-color 2s ease;
+  transition: background-color .2s ease-in;
 }
-.highlight {
+.history div:last-of-type .highlight {
   background-color: yellow;
 }
 
@@ -67,8 +69,16 @@ em {
   border-bottom: 1px solid black;
 }
 .history {
-  height: 80px;
+  height: 60px;
   font-size: 20px;
   overflow-y: scroll;
   margin-bottom: 10px;
+}
+
+.pull-right {
+  float: right;
+}
+
+.checkmark {
+  font-weight: bold;
 }
